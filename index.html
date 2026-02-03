@@ -19,4 +19,139 @@
         
         /* Interactive Buttons */
         .odd-btn { background: #1a1a1d; border: 1px solid var(--primary); color: #fff; padding: 8px 15px; border-radius: 4px; cursor: pointer; transition: 0.2s; width: 60px; }
-        .odd-btn:hover { background: var(--primary);
+        .odd-btn:hover { background: var(--primary); }
+        .odd-btn.selected { background: #ffbd00; color: #000; border-color: #ffbd00; }
+
+        /* Sidebar & Slip */
+        .bet-slip { background: var(--card); border-radius: 8px; padding: 15px; position: sticky; top: 20px; }
+        .slip-item { background: #333; padding: 10px; border-radius: 4px; margin-bottom: 10px; font-size: 0.9rem; border-left: 4px solid var(--primary); }
+        input[type="number"] { width: 100%; padding: 8px; margin: 10px 0; border-radius: 4px; border: none; }
+        
+        .place-bet-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .place-bet-btn:disabled { background: #888; cursor: not-allowed; }
+        
+        .footer-note { grid-column: span 2; text-align: center; font-size: 0.8rem; color: #888; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>BetGenius</h1>
+    <div>Balance: <strong id="balance">$1000.00</strong></div>
+</header>
+
+<div class="container">
+    <section class="odds-card">
+        <h2>Live Football Odds</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Match</th>
+                    <th>Home</th>
+                    <th>Draw</th>
+                    <th>Away</th>
+                </tr>
+            </thead>
+            <tbody id="odds-table">
+                <tr>
+                    <td>Lions vs. Eagles</td>
+                    <td><button class="odd-btn" onclick="addToSlip('Lions vs Eagles', 'Home', 2.10, this)">2.10</button></td>
+                    <td><button class="odd-btn" onclick="addToSlip('Lions vs Eagles', 'Draw', 3.40, this)">3.40</button></td>
+                    <td><button class="odd-btn" onclick="addToSlip('Lions vs Eagles', 'Away', 1.95, this)">1.95</button></td>
+                </tr>
+                <tr>
+                    <td>Sharks vs. Titans</td>
+                    <td><button class="odd-btn" onclick="addToSlip('Sharks vs Titans', 'Home', 1.50, this)">1.50</button></td>
+                    <td><button class="odd-btn" onclick="addToSlip('Sharks vs Titans', 'Draw', 4.00, this)">4.00</button></td>
+                    <td><button class="odd-btn" onclick="addToSlip('Sharks vs Titans', 'Away', 5.20, this)">5.20</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <aside class="bet-slip">
+        <h3>Your Bet Slip</h3>
+        <div id="slip-container">
+            <p id="empty-msg">Select an odd to start betting</p>
+        </div>
+        
+        <div id="bet-controls" style="display:none;">
+            <label>Stake ($):</label>
+            <input type="number" id="stake-input" value="10" min="1" oninput="updatePotential()">
+            <div style="display: flex; justify-content: space-between; margin: 10px 0;">
+                <span>Potential Win:</span>
+                <span id="win-amount" style="color: #4caf50; font-weight: bold;">$0.00</span>
+            </div>
+            <button class="place-bet-btn" onclick="placeBet()">PLACE BET</button>
+        </div>
+    </aside>
+
+    <footer class="footer-note">
+        Must be 18+ to play. Please gamble responsibly.
+    </footer>
+</div>
+
+<script>
+    let currentBalance = 1000.00;
+    let selectedOdd = null;
+
+    function addToSlip(match, selection, price, btn) {
+        // Clear previous selection highlight
+        document.querySelectorAll('.odd-btn').forEach(b => b.classList.remove('selected'));
+        
+        // Update selection
+        btn.classList.add('selected');
+        selectedOdd = { match, selection, price };
+
+        // Update UI
+        document.getElementById('empty-msg').style.display = 'none';
+        document.getElementById('bet-controls').style.display = 'block';
+        document.getElementById('slip-container').innerHTML = `
+            <div class="slip-item">
+                <strong>${selection}</strong> @ ${price}<br>
+                <small>${match}</small>
+            </div>
+        `;
+        updatePotential();
+    }
+
+    function updatePotential() {
+        const stake = document.getElementById('stake-input').value;
+        if (selectedOdd && stake > 0) {
+            const win = (stake * selectedOdd.price).toFixed(2);
+            document.getElementById('win-amount').innerText = `$${win}`;
+        }
+    }
+
+    function placeBet() {
+        const stake = parseFloat(document.getElementById('stake-input').value);
+
+        if (stake > currentBalance) {
+            alert("Insufficient balance!");
+            return;
+        }
+
+        if (stake <= 0) {
+            alert("Please enter a valid stake.");
+            return;
+        }
+
+        // Deduct balance
+        currentBalance -= stake;
+        document.getElementById('balance').innerText = `$${currentBalance.toFixed(2)}`;
+
+        // Reset Slip
+        alert(`Bet Placed! $${stake} on ${selectedOdd.selection}. Good luck!`);
+        resetSlip();
+    }
+
+    function resetSlip() {
+        selectedOdd = null;
+        document.getElementById('slip-container').innerHTML = '<p id="empty-msg">Select an odd to start betting</p>';
+        document.getElementById('bet-controls').style.display = 'none';
+        document.querySelectorAll('.odd-btn').forEach(b => b.classList.remove('selected'));
+    }
+</script>
+
+</body>
+</html>
