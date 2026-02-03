@@ -3,107 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keyboard Calculator</title>
+    <title>BetGenius | Sports Dashboard</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #121212; margin: 0; }
-        .calculator { background: #1e1e1e; padding: 25px; border-radius: 20px; box-shadow: 0px 15px 35px rgba(0,0,0,0.5); width: 320px; }
-        #display {
-            width: 100%; height: 60px; font-size: 2rem; text-align: right; margin-bottom: 15px;
-            padding: 10px; box-sizing: border-box; border: none; border-radius: 10px;
-            background: #2d2d2d; color: #00ff88; font-family: monospace;
-        }
-        .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-        button {
-            padding: 20px; font-size: 1.2rem; border: none; border-radius: 12px;
-            cursor: pointer; background: #333; color: white; transition: 0.1s;
-        }
-        button:active { transform: scale(0.95); background: #444; }
-        .operator { background: #ff9f0a; color: black; font-weight: bold; }
-        .equals { background: #00ff88; color: black; grid-column: span 2; }
-        .clear { background: #ff453a; grid-column: span 2; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #1a1a1d; color: white; }
+        header { background: #950740; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .container { display: grid; grid-template-columns: 3fr 1fr; gap: 20px; padding: 20px; }
+        
+        /* Table Styles */
+        .odds-card { background: #4e4e50; border-radius: 8px; padding: 15px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; color: #c3073f; padding: 10px; border-bottom: 2px solid #6f2232; }
+        td { padding: 15px 10px; border-bottom: 1px solid #666; }
+        
+        /* Betting Buttons */
+        .odd-btn { background: #1a1a1d; border: 1px solid #950740; color: #fff; padding: 8px 15px; border-radius: 4px; cursor: pointer; transition: 0.3s; }
+        .odd-btn:hover { background: #950740; }
+
+        /* Sidebar */
+        .bet-slip { background: #4e4e50; border-radius: 8px; padding: 15px; height: fit-content; }
+        .place-bet-btn { width: 100%; background: #c3073f; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div class="calculator">
-    <input type="text" id="display" disabled value="0">
-    <div class="buttons">
-        <button class="clear" onclick="clearDisplay()">AC (Esc)</button>
-        <button class="operator" onclick="appendToDisplay('/')">/</button>
-        <button class="operator" onclick="appendToDisplay('*')">×</button>
+<header>
+    <h1>BetGenius</h1>
+    <nav>Balance: $1,250.00</nav>
+</header>
 
-        <button onclick="appendToDisplay('7')">7</button>
-        <button onclick="appendToDisplay('8')">8</button>
-        <button onclick="appendToDisplay('9')">9</button>
-        <button class="operator" onclick="appendToDisplay('-')">-</button>
+<div class="container">
+    <section class="odds-card">
+        <h2>Live Football Odds</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Match</th>
+                    <th>Home (1)</th>
+                    <th>Draw (X)</th>
+                    <th>Away (2)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Lions vs. Eagles</td>
+                    <td><button class="odd-btn">2.10</button></td>
+                    <td><button class="odd-btn">3.40</button></td>
+                    <td><button class="odd-btn">1.95</button></td>
+                </tr>
+                <tr>
+                    <td>Sharks vs. Titans</td>
+                    <td><button class="odd-btn">1.50</button></td>
+                    <td><button class="odd-btn">4.00</button></td>
+                    <td><button class="odd-btn">5.20</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
 
-        <button onclick="appendToDisplay('4')">4</button>
-        <button onclick="appendToDisplay('5')">5</button>
-        <button onclick="appendToDisplay('6')">6</button>
-        <button class="operator" onclick="appendToDisplay('+')">+</button>
-
-        <button onclick="appendToDisplay('1')">1</button>
-        <button onclick="appendToDisplay('2')">2</button>
-        <button onclick="appendToDisplay('3')">3</button>
-        <button class="operator" onclick="calculate()">=</button>
-
-        <button onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button>
-        <button onclick="appendToDisplay('.')">.</button>
-    </div>
+    <aside class="bet-slip">
+        <h3>Your Bet Slip</h3>
+        <p style="font-size: 0.9rem; color: #bbb;">No bets selected.</p>
+        <hr>
+        <div style="display: flex; justify-content: space-between;">
+            <span>Total Stake:</span>
+            <span>$0.00</span>
+        </div>
+        <button class="place-bet-btn">PLACE BET</button>
+    </aside>
 </div>
-
-<script>
-    const display = document.getElementById('display');
-
-    // 1. Core Functions
-    function appendToDisplay(input) {
-        if (display.value === "0" || display.value === "Error") {
-            display.value = input;
-        } else {
-            display.value += input;
-        }
-    }
-
-    function clearDisplay() {
-        display.value = "0";
-    }
-
-    function calculate() {
-        try {
-            // Using a simple Function constructor instead of eval for slightly better practice
-            display.value = new Function('return ' + display.value)();
-        } catch (e) {
-            display.value = "Error";
-        }
-    }
-
-    // 2. Keyboard Control Logic
-    document.addEventListener('keydown', (event) => {
-        const key = event.key;
-
-        // Numbers and Operators
-        if (/[0-9\+\-\*\/\.]/.test(key)) {
-            appendToDisplay(key);
-        }
-        // Enter key for equals
-        if (key === 'Enter') {
-            event.preventDefault(); // Prevents page refresh
-            calculate();
-        }
-        // Backspace for clearing
-        if (key === 'Backspace') {
-            if (display.value.length > 1) {
-                display.value = display.value.slice(0, -1);
-            } else {
-                display.value = "0";
-            }
-        }
-        // Escape for All Clear
-        if (key === 'Escape') {
-            clearDisplay();
-        }
-    });
-</script>
 
 </body>
 </html>
