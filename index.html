@@ -3,168 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Digital Well | Interactive Wishes</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>The Alpas Cookie | Freshly Baked</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            background: radial-gradient(circle at center, #0a0a1a 0%, #020205 100%);
-            color: #e0e0e0;
-            overflow: hidden;
-            height: 100vh;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Quicksand:wght@400;600&display=swap');
 
-        /* Wish Animation */
-        .flying-wish {
-            position: absolute;
-            white-space: nowrap;
-            color: rgba(255, 255, 255, 0.9);
-            text-shadow: 0 0 8px rgba(129, 140, 248, 0.6), 0 0 20px rgba(129, 140, 248, 0.3);
-            pointer-events: none;
-            z-index: 1;
-            filter: blur(var(--blur));
-            animation: cosmic-drift linear forwards;
-        }
+:root {
+    --primary: #5d4037;   /* Deep Cocoa */
+    --accent: #d97706;    /* Baked Gold */
+    --secondary: #fef3c7; /* Buttercream */
+    --bg: #fffcf2;       /* Off-white parchment */
+    --text: #451a03;
+    --white: #ffffff;
+}
 
-        @keyframes cosmic-drift {
-            0% { transform: translateX(-120%) translateY(0); opacity: 0; }
-            15% { opacity: 1; }
-            85% { opacity: 1; }
-            100% { transform: translateX(120vw) translateY(var(--drift-y)); opacity: 0; }
-        }
+* {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
 
-        /* Twinkling Stars Background */
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle var(--duration) infinite ease-in-out;
-        }
+body {
+    font-family: 'Quicksand', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+}
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.2); }
-        }
+/* --- Catchy Typography --- */
+h1, h2, .logo {
+    font-family: 'Cherry+Bomb+One', cursive; /* Playful, cookie-like font */
+    letter-spacing: 1px;
+}
 
-        /* Glassmorphism Panel */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
-        }
+/* --- Sticky Modern Nav --- */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 10%;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px); /* Modern glass effect */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 2px dashed var(--secondary);
+}
+
+/* --- Hero Section with "Glow" --- */
+.hero {
+    padding: 8rem 10%;
+    background: radial-gradient(circle at center, rgba(255,251,235,0.7) 0%, rgba(255,251,235,0.9) 100%), 
+                url('https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&q=80&w=1000');
+    background-size: cover;
+    background-position: center;
+    border-radius: 0 0 50px 50px; /* Curvy bottom */
+    margin-bottom: 3rem;
+}
+
+.hero h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: var(--primary);
+    text-shadow: 2px 2px 0px var(--white);
+}
+
+/* --- The "Cookie" Button --- */
+.btn {
+    background-color: var(--accent);
+    color: white;
+    padding: 18px 35px;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    display: inline-block;
+    box-shadow: 0 8px 0px #92400e; /* 3D effect */
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 11px 0px #92400e;
+    filter: brightness(1.1);
+}
+
+.btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0px #92400e;
+}
+
+/* --- Menu Cards --- */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    background: var(--white);
+    border-radius: 25px;
+    overflow: hidden;
+    padding-bottom: 1.5rem;
+    transition: all 0.4s ease;
+    border: 3px solid transparent;
+    position: relative;
+}
+
+.card:hover {
+    transform: scale(1.03) rotate(1deg);
+    border-color: var(--secondary);
+    box-shadow: 0 20px 40px rgba(69, 26, 3, 0.1);
+}
+
+.card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: 0.5s ease;
+}
+
+.card:hover img {
+    transform: scale(1.1);
+}
+
+.price {
+    font-size: 1.4rem;
+    color: var(--accent);
+    font-weight: 800;
+    margin: 0.5rem 0;
+}
+
+/* --- Added Flair --- */
+.card h3::after {
+    content: ' ✨';
+}
+
     </style>
 </head>
-<body class="flex items-center justify-center font-sans">
+<body>
 
-    <!-- Animation Layer -->
-    <div id="cosmos-bg" class="absolute inset-0 z-0"></div>
-
-    <!-- UI Overlay -->
-    <main class="relative z-10 w-full max-w-md p-8 glass-panel rounded-3xl mx-4">
-        <header class="text-center mb-8">
-            <h1 class="text-3xl font-thin tracking-[0.4em] text-indigo-100 uppercase">The Well</h1>
-            <p class="text-[10px] text-indigo-400/50 mt-2 tracking-[0.2em]">SEND YOUR THOUGHTS TO THE UNIVERSE</p>
-        </header>
-
-        <div class="space-y-6">
-            <textarea 
-                id="wishText"
-                placeholder="Write your wish..." 
-                class="w-full h-32 p-4 bg-black/40 border border-white/5 rounded-xl focus:ring-1 focus:ring-indigo-400 focus:outline-none transition-all resize-none text-white placeholder-gray-700 text-sm"
-            ></textarea>
-            
-            <button 
-                id="castBtn"
-                onclick="processWish()"
-                class="w-full py-4 bg-indigo-500/10 border border-indigo-400/30 hover:bg-indigo-500/20 text-indigo-200 font-light tracking-widest rounded-lg transition-all duration-300 uppercase text-xs"
-            >
-                Cast Wish
-            </button>
+    <nav>
+        <div class="logo">🍪 Alpas Cookie</div>
+        <div>
+            <a href="#" style="margin-left:20px; text-decoration:none; color:inherit;">Menu</a>
+            <a href="#" style="margin-left:20px; text-decoration:none; color:inherit;">Our Story</a>
         </div>
+    </nav>
 
-        <p id="feedback" class="text-center mt-6 text-[10px] text-indigo-300/30 opacity-0 transition-opacity duration-1000">
-            STARS ARE ALIGNING...
-        </p>
-    </main>
+    <header class="hero">
+        <h1>Warm, Gooey, and Delivered to Your Door.</h1>
+        <p>Baking memories since 2026 using only organic ingredients.</p>
+        <br>
+        <a href="#menu" class="btn">Order Fresh Cookies</a>
+    </header>
 
-    <script>
-        // Initialize background stars
-        const bg = document.getElementById('cosmos-bg');
-        for (let i = 0; i < 200; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            const size = Math.random() * 2 + 'px';
-            star.style.width = size;
-            star.style.height = size;
-            star.style.top = Math.random() * 100 + '%';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.setProperty('--duration', (Math.random() * 4 + 2) + 's');
-            bg.appendChild(star);
-        }
+    <section class="menu" id="menu">
+        <h2 style="text-align:center">Today's Batch</h2>
+        <div class="grid">
+            <div class="card">
+                <img src="https://imgs.search.brave.com/lXr2Nkxph50aN0Tx2IhA3ypb_ZbX3eZjOtJZSIKgEoA/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/aW5zcGlyZWR0YXN0/ZS5uZXQvd3AtY29u/dGVudC91cGxvYWRz/LzIwMTkvMTEvRWFz/eS1DaG9jb2xhdGUt/Q2hpcC1Db29raWVz/LTEyMDAuanBn" alt="Chocolate Chip">
+                <h3>Classic Chunk</h3>
+                <p class="price">&#8369;45.00</p>
+            </div>
+            <div class="card">
+                <img src="https://imgs.search.brave.com/85rsGOOna-_xAAA_no6aMYdwp-yy6-yMXSNjugI2j2E/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9vbGl2/ZXNudGh5bWUuY29t/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDIy/LzExL01hdGNoYS1D/b29raWVzLTExLTMw/MHgzMDAuanBn" alt="Dark Matcha cookies">
+                <h3>Dark Matcha cookies</h3>
+                <p class="price">&#8369;50.00</p>
+            </div>
+            <footer>
+    <div class="footer-content">
+        <p>© 2026 The Crumbly Cookie Co. | All Rights Reserved</p>
+        <div class="legal-links">
+            <a href="#">Privacy Policy</a> | 
+            <a href="#">Terms of Service</a> | 
+            <a href="#">Allergen Info</a>
+        </div>
+        <p>123 Baker's Lane, Sweetwater, CA</p>
+    </div>
+</footer>
+        </div>
+    </section>
 
-        function processWish() {
-            const input = document.getElementById('wishText');
-            const btn = document.getElementById('castBtn');
-            const text = input.value.trim();
-
-            if (!text) return;
-
-            input.disabled = true;
-            btn.disabled = true;
-            
-            let countdown = 3;
-            btn.innerText = `RELEASING IN ${countdown}`;
-
-            const interval = setInterval(() => {
-                countdown--;
-                if (countdown > 0) {
-                    btn.innerText = `RELEASING IN ${countdown}`;
-                } else {
-                    clearInterval(interval);
-                    btn.innerText = "SENT";
-                    launchWish(text);
-                    resetUI();
-                }
-            }, 1000);
-        }
-
-        function launchWish(content) {
-            const wish = document.createElement('div');
-            wish.className = 'flying-wish';
-            wish.innerText = content;
-            
-            // Randomize visual depth and movement
-            const randomSize = (0.7 + Math.random() * 0.8).toFixed(2);
-            const randomBlur = (Math.random() * 2).toFixed(1);
-            const driftY = (Math.random() * 200 - 100) + 'px';
-            
-            wish.style.fontSize = `${randomSize}rem`;
-            wish.style.setProperty('--blur', `${randomBlur}px`);
-            wish.style.setProperty('--drift-y', driftY);
-            wish.style.top = (Math.random() * 70 + 15) + '%';
-            
-            // Random duration (15s to 25s)
-            const speed = 15 + Math.random() * 10;
-            wish.style.animationDuration = `${speed}s`;
-            
-            bg.appendChild(wish);
-            
-            // Cleanup memory
-            setTimeout(() => wish.remove(), speed * 1000);
-        }
-
-        function resetUI() {
-            const feedback = document.getElementById('feedback');
-            feedback.style.opacity = "1";
-            
-            setTimeout(() => {
-                document.getElementById('wishText').value = "";
-                document.getElementById('wishText').disabled = false;
-                document.getElementById('castBtn').disabled = false;
-                document.getElementById('castBtn').innerText = "Cast Wish";
-                feedback.style.opacity = "0";
-            }, 3000);
-        }
-    </script>
 </body>
 </html>
