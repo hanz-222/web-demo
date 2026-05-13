@@ -3,87 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Digital Well | Make a Wish</title>
+    <title>The Digital Well | Interactive Wishes</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            background: radial-gradient(circle at center, #1a1a2e 0%, #0f0f1a 100%);
+            background: radial-gradient(circle at center, #0a0a1a 0%, #020205 100%);
             color: #e0e0e0;
+            overflow: hidden;
+            height: 100vh;
         }
+
+        /* Wish Animation */
+        .flying-wish {
+            position: absolute;
+            white-space: nowrap;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 0 8px rgba(129, 140, 248, 0.6), 0 0 20px rgba(129, 140, 248, 0.3);
+            pointer-events: none;
+            z-index: 1;
+            filter: blur(var(--blur));
+            animation: cosmic-drift linear forwards;
+        }
+
+        @keyframes cosmic-drift {
+            0% { transform: translateX(-120%) translateY(0); opacity: 0; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { transform: translateX(120vw) translateY(var(--drift-y)); opacity: 0; }
+        }
+
+        /* Twinkling Stars Background */
         .star {
             position: absolute;
             background: white;
             border-radius: 50%;
-            opacity: 0.5;
             animation: twinkle var(--duration) infinite ease-in-out;
         }
+
         @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+        }
+
+        /* Glassmorphism Panel */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center overflow-hidden font-sans">
+<body class="flex items-center justify-center font-sans">
 
-    <!-- Star Background -->
-    <div id="stars-container" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+    <!-- Animation Layer -->
+    <div id="cosmos-bg" class="absolute inset-0 z-0"></div>
 
-    <main class="relative z-10 w-full max-w-md p-8 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl shadow-2xl mx-4">
+    <!-- UI Overlay -->
+    <main class="relative z-10 w-full max-w-md p-8 glass-panel rounded-3xl mx-4">
         <header class="text-center mb-8">
-            <h1 class="text-4xl font-light tracking-widest text-indigo-300 mb-2">WISH</h1>
-            <p class="text-sm text-gray-400 italic">Whisper it to the digital void.</p>
+            <h1 class="text-3xl font-thin tracking-[0.4em] text-indigo-100 uppercase">The Well</h1>
+            <p class="text-[10px] text-indigo-400/50 mt-2 tracking-[0.2em]">SEND YOUR THOUGHTS TO THE UNIVERSE</p>
         </header>
 
-        <section>
+        <div class="space-y-6">
             <textarea 
-                id="wishInput"
-                placeholder="What does your heart desire?" 
-                class="w-full h-32 p-4 bg-black/20 border border-white/10 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all resize-none text-white placeholder-gray-500"
+                id="wishText"
+                placeholder="Write your wish..." 
+                class="w-full h-32 p-4 bg-black/40 border border-white/5 rounded-xl focus:ring-1 focus:ring-indigo-400 focus:outline-none transition-all resize-none text-white placeholder-gray-700 text-sm"
             ></textarea>
             
             <button 
-                onclick="castWish()"
-                class="w-full mt-6 py-3 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium rounded-xl transition-all transform hover:scale-[1.02] active:scale-95 shadow-lg"
+                id="castBtn"
+                onclick="processWish()"
+                class="w-full py-4 bg-indigo-500/10 border border-indigo-400/30 hover:bg-indigo-500/20 text-indigo-200 font-light tracking-widest rounded-lg transition-all duration-300 uppercase text-xs"
             >
-                Cast into the Universe
+                Cast Wish
             </button>
-        </section>
+        </div>
 
-        <footer id="message" class="mt-6 text-center text-sm text-indigo-400 opacity-0 transition-opacity duration-500">
-            Your wish has been received by the stars.
-        </footer>
+        <p id="feedback" class="text-center mt-6 text-[10px] text-indigo-300/30 opacity-0 transition-opacity duration-1000">
+            STARS ARE ALIGNING...
+        </p>
     </main>
 
     <script>
-        // Generate stars randomly
-        const container = document.getElementById('stars-container');
-        for (let i = 0; i < 100; i++) {
+        // Initialize background stars
+        const bg = document.getElementById('cosmos-bg');
+        for (let i = 0; i < 200; i++) {
             const star = document.createElement('div');
             star.className = 'star';
-            const size = Math.random() * 3 + 'px';
+            const size = Math.random() * 2 + 'px';
             star.style.width = size;
             star.style.height = size;
             star.style.top = Math.random() * 100 + '%';
             star.style.left = Math.random() * 100 + '%';
-            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
-            container.appendChild(star);
+            star.style.setProperty('--duration', (Math.random() * 4 + 2) + 's');
+            bg.appendChild(star);
         }
 
-        function castWish() {
-            const input = document.getElementById('wishInput');
-            const message = document.getElementById('message');
+        function processWish() {
+            const input = document.getElementById('wishText');
+            const btn = document.getElementById('castBtn');
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            input.disabled = true;
+            btn.disabled = true;
             
-            if (input.value.trim() !== "") {
-                // In a real app, you'd send this to a database here
-                console.log("Wish cast:", input.value);
-                
-                input.value = "";
-                message.style.opacity = "1";
-                
-                setTimeout(() => {
-                    message.style.opacity = "0";
-                }, 4000);
-            }
+            let countdown = 3;
+            btn.innerText = `RELEASING IN ${countdown}`;
+
+            const interval = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    btn.innerText = `RELEASING IN ${countdown}`;
+                } else {
+                    clearInterval(interval);
+                    btn.innerText = "SENT";
+                    launchWish(text);
+                    resetUI();
+                }
+            }, 1000);
+        }
+
+        function launchWish(content) {
+            const wish = document.createElement('div');
+            wish.className = 'flying-wish';
+            wish.innerText = content;
+            
+            // Randomize visual depth and movement
+            const randomSize = (0.7 + Math.random() * 0.8).toFixed(2);
+            const randomBlur = (Math.random() * 2).toFixed(1);
+            const driftY = (Math.random() * 200 - 100) + 'px';
+            
+            wish.style.fontSize = `${randomSize}rem`;
+            wish.style.setProperty('--blur', `${randomBlur}px`);
+            wish.style.setProperty('--drift-y', driftY);
+            wish.style.top = (Math.random() * 70 + 15) + '%';
+            
+            // Random duration (15s to 25s)
+            const speed = 15 + Math.random() * 10;
+            wish.style.animationDuration = `${speed}s`;
+            
+            bg.appendChild(wish);
+            
+            // Cleanup memory
+            setTimeout(() => wish.remove(), speed * 1000);
+        }
+
+        function resetUI() {
+            const feedback = document.getElementById('feedback');
+            feedback.style.opacity = "1";
+            
+            setTimeout(() => {
+                document.getElementById('wishText').value = "";
+                document.getElementById('wishText').disabled = false;
+                document.getElementById('castBtn').disabled = false;
+                document.getElementById('castBtn').innerText = "Cast Wish";
+                feedback.style.opacity = "0";
+            }, 3000);
         }
     </script>
 </body>
