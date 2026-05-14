@@ -22,11 +22,15 @@
     scroll-behavior: smooth;
 }
 
+/* Keep the new page centered */
 body {
-    font-family: 'Quicksand', sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    margin: 0;
 }
 
 /* --- Catchy Typography --- */
@@ -137,21 +141,66 @@ nav {
     content: ' ✨';
 }
 
+footer {
+    display: flex;
+    flex-direction: column; /* Stacks the text and links vertically */
+    align-items: center;    /* Centers everything horizontally */
+    justify-content: center; /* Centers everything vertically */
+    text-align: center;     /* Ensures multi-line text is centered */
+    padding: 40px 20px;     /* Adds nice breathing room */
+    background-color: var(--primary); /* Uses your chocolate brown */
+    color: white;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;              /* Puts space between Privacy, Terms, and Contact */
+    margin: 15px 0;         /* Adds space above and below the links */
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+}
+#topBtn {
+    display: none; /* Hidden by default */
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%); /* The secret to perfect horizontal centering */
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: var(--primary);
+    color: white;
+    cursor: pointer;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+#topBtn:hover {
+    background-color: var(--accent);
+    transform: translateX(-50%) translateY(-5px); /* Keeps center while lifting */
+}
     </style>
 </head>
 <body>
-
     <nav>
         <div class="logo">🍪 Alpas Cookie</div>
-        <div>
-            <a href="#" style="margin-left:20px; text-decoration:none; color:inherit;">Menu</a>
+        <div class="nav-links">
+            <a href="#menu" style="text-decoration:none; color:inherit;">Menu</a>
             <a href="#" style="margin-left:20px; text-decoration:none; color:inherit;">Our Story</a>
+            <a></a>
+            <a href="menu.html" class="btn">View Full Menu</a>
         </div>
     </nav>
 
     <header class="hero">
-        <h1>Warm, Gooey, and Delivered to Your Door.</h1>
-        <p>Baking memories since 2026 using only organic ingredients.</p>
+        <h1>Warm, Gooey, and Delivered.</h1>
+        <p>Hand-crafted organic cookies baked fresh every morning in the heart of the city.</p>
         <br>
         <a href="#menu" class="btn">Order Fresh Cookies</a>
     </header>
@@ -169,19 +218,41 @@ nav {
                 <h3>Dark Matcha cookies</h3>
                 <p class="price">&#8369;50.00</p>
             </div>
-            <footer>
-    <div class="footer-content">
-        <p>© 2026 The Crumbly Cookie Co. | All Rights Reserved</p>
-        <div class="legal-links">
-            <a href="#">Privacy Policy</a> | 
-            <a href="#">Terms of Service</a> | 
-            <a href="#">Allergen Info</a>
+<h1></h1>
+<h1></h1>
+<h1></h1>
+            <h1></h1>
+            <footer >
+        <h3>The Crumbly Cookie Co.</h3>
+        <p>Baking memories since 2026.</p>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Contact</a>
         </div>
-        <p>123 Baker's Lane, Sweetwater, CA</p>
-    </div>
-</footer>
+        <p style="opacity: 0.6; font-size: 0.8rem;">© 2026 The Alpas Cookie. All rights reserved.</p>
+    </footer>
         </div>
     </section>
+<script>
+    // Get the button
+    let mybutton = document.getElementById("topBtn");
 
-</body>
+    // When the user scrolls down 300px from the top, show the button
+    window.onscroll = function() {
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    };
+
+    // When the user clicks, scroll to the top
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+</script>
 </html>
